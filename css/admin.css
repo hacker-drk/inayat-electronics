@@ -730,3 +730,111 @@ body.admin-body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Login Screen Overlay */
+.admin-login-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(201, 142, 31, 0.08) 0%, transparent 65%), #FAF8F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 5000;
+}
+
+.admin-login-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px -10px rgba(18, 19, 22, 0.12);
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 34px;
+  text-align: left;
+}
+
+.login-brand-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E2A633 0%, #BE8419 100%);
+  color: #121316;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px -4px rgba(201, 142, 31, 0.4);
+}
+
+.admin-login-card h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--admin-text-main);
+  margin-bottom: 6px;
+}
+
+.admin-login-card p.login-sub {
+  font-size: 0.9rem;
+  color: var(--admin-text-muted);
+  margin-bottom: 24px;
+}
+
+.login-error-alert {
+  background-color: #FDE8E8;
+  border: 1px solid #F8B4B4;
+  color: var(--admin-danger);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.password-input-wrap {
+  position: relative;
+}
+
+.password-input-wrap input {
+  padding-right: 44px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--admin-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:hover {
+  color: var(--admin-text-main);
+}
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background-color: #FDE8E8;
+  color: var(--admin-danger);
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid #F8B4B4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #FBD5D5;
+}

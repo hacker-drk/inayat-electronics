@@ -4,7 +4,13 @@
  * image uploading, JSON export/import, and UI tab management.
  */
 
+const AUTH_CONFIG = {
+  username: 'admin',
+  password: 'inyat123455'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+  initAuthentication();
   initTabNavigation();
   initLivePreview();
   initProductCreation();
@@ -15,6 +21,95 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let productToDeleteId = null;
+
+/**
+ * 0. Dashboard Authentication (Username: admin, Password: inyat123455)
+ */
+function initAuthentication() {
+  const loginOverlay = document.getElementById('adminLoginOverlay');
+  const headerBar = document.getElementById('adminHeaderBar');
+  const mainLayout = document.getElementById('adminMainLayout');
+  const loginForm = document.getElementById('adminLoginForm');
+  const usernameInput = document.getElementById('loginUsername');
+  const passwordInput = document.getElementById('loginPassword');
+  const rememberCheckbox = document.getElementById('loginRememberMe');
+  const errorAlert = document.getElementById('loginErrorAlert');
+  const logoutBtn = document.getElementById('headerLogoutBtn');
+  const togglePassBtn = document.getElementById('togglePasswordVisibility');
+
+  function checkAuth() {
+    const isAuthed = sessionStorage.getItem('inayat_admin_auth') === 'true' ||
+                     localStorage.getItem('inayat_admin_auth') === 'true';
+
+    if (isAuthed) {
+      if (loginOverlay) loginOverlay.style.display = 'none';
+      if (headerBar) headerBar.style.display = 'flex';
+      if (mainLayout) mainLayout.style.display = 'flex';
+    } else {
+      if (loginOverlay) loginOverlay.style.display = 'flex';
+      if (headerBar) headerBar.style.display = 'none';
+      if (mainLayout) mainLayout.style.display = 'none';
+    }
+  }
+
+  // Handle Login Form Submit
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const enteredUser = (usernameInput?.value || '').trim();
+      const enteredPass = (passwordInput?.value || '').trim();
+
+      if (enteredUser.toLowerCase() === AUTH_CONFIG.username.toLowerCase() &&
+          enteredPass === AUTH_CONFIG.password) {
+        
+        // Success
+        if (errorAlert) errorAlert.style.display = 'none';
+        sessionStorage.setItem('inayat_admin_auth', 'true');
+        if (rememberCheckbox?.checked) {
+          localStorage.setItem('inayat_admin_auth', 'true');
+        }
+
+        checkAuth();
+        showToast('Login successful! Welcome to Inayat Electronics Dashboard.');
+        loginForm.reset();
+      } else {
+        // Failed
+        if (errorAlert) {
+          errorAlert.style.display = 'block';
+          errorAlert.textContent = 'Invalid username or password. Please try again.';
+        }
+        if (passwordInput) passwordInput.value = '';
+      }
+    });
+  }
+
+  // Toggle Password Visibility
+  if (togglePassBtn && passwordInput) {
+    togglePassBtn.addEventListener('click', () => {
+      const currentType = passwordInput.getAttribute('type');
+      if (currentType === 'password') {
+        passwordInput.setAttribute('type', 'text');
+        togglePassBtn.style.color = 'var(--admin-gold)';
+      } else {
+        passwordInput.setAttribute('type', 'password');
+        togglePassBtn.style.color = '';
+      }
+    });
+  }
+
+  // Logout
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('inayat_admin_auth');
+      localStorage.removeItem('inayat_admin_auth');
+      checkAuth();
+      showToast('Logged out successfully.');
+    });
+  }
+
+  // Initial check on load
+  checkAuth();
+}
 
 /**
  * 1. Tab Navigation
