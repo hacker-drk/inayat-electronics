@@ -178,34 +178,55 @@ function initFaqAccordion() {
 }
 
 /**
- * 5. Product Category Filtering
+ * 5. Dynamic Product Rendering & Category Filtering
  */
 function initProductFiltering() {
+  const grid = document.getElementById('mainProductsGrid');
   const filterButtons = document.querySelectorAll('.filter-btn');
-  const productCards = document.querySelectorAll('.product-card');
 
-  if (!filterButtons.length || !productCards.length) return;
+  function renderStoreProducts(activeCategory = 'all') {
+    if (!grid) return;
 
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetCategory = btn.getAttribute('data-filter');
+    if (window.InayatProducts) {
+      let products = window.InayatProducts.getAllProducts();
+      
+      if (activeCategory !== 'all') {
+        products = products.filter(p => p.category === activeCategory);
+      }
 
-      // Update active state on buttons
-      filterButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      if (products.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); font-size: 1.05rem;">No products found in this category.</div>`;
+      } else {
+        grid.innerHTML = products.map(p => window.InayatProducts.createProductCardHTML(p)).join('');
+      }
 
-      // Filter product cards
-      productCards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
-        if (targetCategory === 'all' || cardCategory === targetCategory) {
-          card.style.display = 'flex';
-          card.style.opacity = '1';
-        } else {
-          card.style.display = 'none';
-          card.style.opacity = '0';
-        }
+      // Re-bind WhatsApp click actions to new dynamic buttons
+      initWhatsAppLinks();
+    }
+  }
+
+  // Initial render from product store
+  renderStoreProducts('all');
+
+  // Filter button clicks
+  if (filterButtons.length) {
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetCategory = btn.getAttribute('data-filter') || 'all';
+
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        renderStoreProducts(targetCategory);
       });
     });
+  }
+
+  // React to cross-tab product updates from Admin Dashboard
+  window.addEventListener('inayat-products-updated', () => {
+    const currentActiveBtn = document.querySelector('.filter-btn.active');
+    const currentCategory = currentActiveBtn ? currentActiveBtn.getAttribute('data-filter') : 'all';
+    renderStoreProducts(currentCategory);
   });
 }
 

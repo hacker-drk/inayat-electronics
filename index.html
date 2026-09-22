@@ -304,8 +304,8 @@
           <button class="filter-btn" data-filter="supplies">Electrical Supplies</button>
         </div>
 
-        <!-- Product Grid (11 Requested Items) -->
-        <div class="products-grid">
+        <!-- Product Grid (11 Requested Items / Dynamic from Store) -->
+        <div class="products-grid" id="mainProductsGrid">
           <!-- 1. Electrical Wiring Material -->
           <article class="product-card" data-category="wiring">
             <div class="product-thumb-box">
@@ -1150,8 +1150,9 @@
         <div>
           &copy; 2026 Inayat Electronics. All Rights Reserved.
         </div>
-        <div>
-          Professional Local Electrical &amp; Solar Solutions
+        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+          <span>Professional Local Electrical &amp; Solar Solutions</span>
+          <a href="admin.html" style="color: var(--gold-vibrant); font-weight: 600; text-decoration: underline;" target="_blank">Admin Dashboard &rarr;</a>
         </div>
       </div>
     </div>
@@ -1170,6 +1171,7 @@
 
   <!-- Config & Scripts -->
   <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
